@@ -2,4 +2,5 @@
 directory = "functions/"
 
 [build]
-command = "cargo build"
+command = "make build"
+publish = "www"
