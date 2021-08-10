@@ -6,5 +6,5 @@ help: ## Show this help.
 build: ## Build static binary and put it in the functions directory.
 	@cargo build --release
 	@ls target
-	@mkdir -p functions
+	@mkdir -p functions www
 	@cp target/release/hello functions
