@@ -1,2 +1,3 @@
 functions = "functions"
-build = "cargo build"
+[build]
+command = "cargo build"
