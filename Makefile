@@ -7,4 +7,4 @@ build: ## Build static binary and put it in the functions directory.
 	@cargo build --release
 	@ls target
 	@mkdir -p functions
-	@cp target/x86_64-unknown-linux-unknown/release/hello functions
+	@cp target/release/hello functions
