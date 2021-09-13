@@ -1,3 +1,4 @@
+use lambda_http::{Body, IntoResponse, Response};
 use lambda_runtime::{handler_fn, Context, Error};
 use serde_json::{json, Value};
 
@@ -13,11 +14,12 @@ async fn handler(
     event: Value,
     _: Context,
 ) -> Result<Value, Error> {
-    dbg!("in main", &event);
+    dbg!("in main", &event.to_string());
     let first_name =
         event["firstName"].as_str().unwrap_or("world");
 
+    dbg!(&first_name);
     Ok(json!({
-        "message": format!("Hello, {}!", first_name)
+        "body": format!("Hello, {}!", first_name)
     }))
 }
