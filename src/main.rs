@@ -1,14 +1,23 @@
-use lamedh_http::{
-    lambda::{lambda, Context, Error},
-    IntoResponse, Request,
-};
+use lambda_runtime::{handler_fn, Context, Error};
+use serde_json::{json, Value};
 
-#[lambda(http)]
 #[tokio::main]
-async fn main(
-    _: Request,
+async fn main() -> Result<(), Error> {
+    dbg!("cold start");
+    let handler_fn = handler_fn(handler);
+    lambda_runtime::run(handler_fn).await?;
+    Ok(())
+}
+
+async fn handler(
+    event: Value,
     _: Context,
-) -> Result<impl IntoResponse, Error> {
+) -> Result<Value, Error> {
     dbg!("in main");
-    Ok("boop")
+    let first_name =
+        event["firstName"].as_str().unwrap_or("world");
+
+    Ok(json!({
+        "message": format!("Hello, {}!", first_name)
+    }))
 }
