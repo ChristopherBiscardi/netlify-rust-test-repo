@@ -13,7 +13,7 @@ async fn handler(
     event: Value,
     _: Context,
 ) -> Result<Value, Error> {
-    dbg!("in main");
+    dbg!("in main", &event);
     let first_name =
         event["firstName"].as_str().unwrap_or("world");
 
