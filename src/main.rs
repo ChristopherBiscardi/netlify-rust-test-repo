@@ -1,5 +1,11 @@
+use aws_lambda_events::{
+    encodings::Body,
+    event::apigw::{
+        ApiGatewayProxyRequest, ApiGatewayProxyResponse,
+    },
+};
+use http::HeaderMap;
 use lambda_runtime::{handler_fn, Context, Error};
-use serde_json::{json, Value};
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -10,17 +16,25 @@ async fn main() -> Result<(), Error> {
 }
 
 async fn handler(
-    event: Value,
+    event: ApiGatewayProxyRequest,
     _: Context,
-) -> Result<Value, Error> {
-    dbg!("in main", &event.as_str());
-    let first_name = event["queryStringParameters"]
-        ["firstName"]
-        .as_str()
-        .unwrap_or("world");
+) -> Result<ApiGatewayProxyResponse, Error> {
+    dbg!("in main", &event);
+    let world = "world".to_string();
+    let first_name = event
+        .query_string_parameters
+        .get("firstName")
+        .unwrap_or(&world);
 
     dbg!(&first_name);
-    Ok(json!({
-        "body": format!("Hello, {}!", first_name)
-    }))
+    Ok(ApiGatewayProxyResponse {
+        status_code: 200,
+        headers: HeaderMap::new(),
+        multi_value_headers: HeaderMap::new(),
+        body: Some(Body::Text(format!(
+            "Hello, {}!",
+            first_name
+        ))),
+        is_base64_encoded: Some(false),
+    })
 }
